@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/components/ui/use-toast"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { supabase } from "@/lib/supabaseClient" 
 import { Loader2, Check, X, AlertCircle, Eye, EyeOff } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 
@@ -35,7 +35,6 @@ export default function ChangePasswordDialog({
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const { toast } = useToast()
-  const supabase = createClientComponentClient()
 
   // Avaliar a força da senha quando ela muda
   useEffect(() => {

@@ -1,3 +1,5 @@
+"use client"
+
 import { TopNav } from "@/components/top-nav"
 import { BottomNav } from "@/components/bottom-nav"
 import { VideoLessonCard } from "@/components/video-lesson-card"

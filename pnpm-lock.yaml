@@ -98,12 +98,6 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: latest
         version: 1.2.16(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@supabase/auth-helpers-nextjs':
-        specifier: latest
-        version: 0.15.0(@supabase/supabase-js@2.117.1(@opentelemetry/api@1.9.1))
-      '@supabase/auth-helpers-react':
-        specifier: latest
-        version: 0.15.0(@supabase/supabase-js@2.117.1(@opentelemetry/api@1.9.1))
       '@supabase/supabase-js':
         specifier: latest
         version: 2.117.1(@opentelemetry/api@1.9.1)
@@ -1384,18 +1378,6 @@ packages:
   '@standard-schema/utils@0.3.0':
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
-  '@supabase/auth-helpers-nextjs@0.15.0':
-    resolution: {integrity: sha512-VtXz3GGnxluoxks1g3SaCoYr2OZ7PgRukDl+pLWrDfD2dPDaG8hmkp5iBZsU+lmsDYALGNO2dgbymgpAfD8eCQ==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    peerDependencies:
-      '@supabase/supabase-js': ^2.76.1
-
-  '@supabase/auth-helpers-react@0.15.0':
-    resolution: {integrity: sha512-ddyCelBWeOtBNJiJ1x947ZxVEbjydIvpo9hIQ/J/uf+ozLj2buOal+P273rfUIyUf5mIfOtWo9l2hnAqsP/x0w==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    peerDependencies:
-      '@supabase/supabase-js': ^2.76.1
-
   '@supabase/auth-js@2.117.1':
     resolution: {integrity: sha512-3vJpc5thxaovbZ2zrWagzp/ZtCcXpQk1xftinzneNB1XLdhAmjqChOnj2Y8wpriYEFVvlqC+sFbR0JBUi83hDA==}
     engines: {node: '>=22.0.0'}
@@ -1561,10 +1543,6 @@ packages:
   commander@4.1.1:
     resolution: {integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==}
     engines: {node: '>= 6'}
-
-  cookie@1.1.1:
-    resolution: {integrity: sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ==}
-    engines: {node: '>=18'}
 
   core-js@3.50.0:
     resolution: {integrity: sha512-BRWgOLKkFeCgRudR6zrs8p9XJZcE14grzKMMssoYrk6krtuEZ7MTKPIY5RzOnqsEKIR9kst7wNzphttraT+Yqw==}
@@ -3361,16 +3339,6 @@ snapshots:
 
   '@standard-schema/utils@0.3.0': {}
 
-  '@supabase/auth-helpers-nextjs@0.15.0(@supabase/supabase-js@2.117.1(@opentelemetry/api@1.9.1))':
-    dependencies:
-      '@supabase/supabase-js': 2.117.1(@opentelemetry/api@1.9.1)
-      cookie: 1.1.1
-
-  '@supabase/auth-helpers-react@0.15.0(@supabase/supabase-js@2.117.1(@opentelemetry/api@1.9.1))':
-    dependencies:
-      '@supabase/supabase-js': 2.117.1(@opentelemetry/api@1.9.1)
-      cookie: 1.1.1
-
   '@supabase/auth-js@2.117.1':
     dependencies:
       tslib: 2.8.1
@@ -3547,8 +3515,6 @@ snapshots:
       - '@types/react-dom'
 
   commander@4.1.1: {}
-
-  cookie@1.1.1: {}
 
   core-js@3.50.0:
     optional: true

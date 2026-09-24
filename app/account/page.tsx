@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { supabase } from "@/lib/supabaseClient"
 import type { User } from "@supabase/supabase-js"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -62,7 +62,6 @@ export default function AccountPage() {
     contentUpdates: true,
     forumResponses: true,
   })
-  const supabase = createClientComponentClient()
   const router = useRouter()
   const { toast } = useToast()
   const [error, setError] = useState<string | null>(null)

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/components/ui/use-toast"
-import { useSupabaseClient } from "@supabase/auth-helpers-react"
+import { supabase } from "@/lib/supabaseClient"
 import { useAuth } from "@/hooks/useAuth"
 import {
   BookmarkCheck,
@@ -444,7 +444,6 @@ export default function StudyTipsPage() {
 
   const router = useRouter()
   const { toast } = useToast()
-  const supabase = useSupabaseClient()
   const { user } = useAuth()
 
   useEffect(() => {
