@@ -15,21 +15,50 @@ export interface AuthResponse {
   error: string | null
 }
 
+function traduzirErroCadastro(mensagem: string): string {
+  const m = mensagem.toLowerCase()
+  if (m.includes("database error")) {
+    return "Não foi possível criar sua conta agora. Tente novamente em instantes."
+  }
+  if (m.includes("not authorized")) {
+    return "Não foi possível enviar o e-mail de confirmação para este endereço. Tente novamente mais tarde."
+  }
+  if (m.includes("rate limit") || m.includes("security purposes")) {
+    return "Muitas tentativas de cadastro. Aguarde alguns minutos e tente novamente."
+  }
+  if (m.includes("already registered")) {
+    return "Este e-mail já está cadastrado. Tente entrar ou recuperar a senha."
+  }
+  if (m.includes("password")) {
+    return "A senha não atende aos requisitos. Use pelo menos 6 caracteres."
+  }
+  if (m.includes("invalid") && m.includes("email")) {
+    return "E-mail inválido. Confira o endereço digitado."
+  }
+  return mensagem
+}
+
 export async function signUp(email: string, password: string, name?: string): Promise<AuthResponse> {
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL || `${window.location.origin}/dashboard`,
+        emailRedirectTo: process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL || `${window.location.origin}/`,
         data: {
           name: name || "",
         },
       },
     })
 
-    if (error) {
-      return { user: null, error: error.message }
+   if (error) {
+      console.error("Erro no cadastro (Supabase):", error.message)
+      return { user: null, error: traduzirErroCadastro(error.message) }
+    }
+
+    // Com confirmação de e-mail ligada, um e-mail que já existe volta "sem erro", mas sem identidades
+    if (data.user && data.user.identities && data.user.identities.length === 0) {
+      return { user: null, error: "Este e-mail já está cadastrado. Tente entrar ou recuperar a senha." }
     }
 
     if (data.user) {

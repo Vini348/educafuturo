@@ -34,21 +34,20 @@ export default function RegisterPage() {
     }
 
     try {
-      const { data, error } = await signUp(email, password, fullName)
+      const { user, error } = await signUp(email, password, fullName)
 
       if (error) {
-        setError(error.message)
-        setIsLoading(false)
+        setError(error)
         return
       }
 
-      if (data?.user) {
+      if (user) {
         setSuccess(true)
         setError("")
-        // Redirecionar para login após alguns segundos
+        // Dá tempo de ler o aviso e depois leva para o login
         setTimeout(() => {
           router.push("/login")
-        }, 3000)
+        }, 6000)
       }
     } catch (err) {
       console.error("Erro inesperado durante registro:", err)
@@ -64,7 +63,7 @@ export default function RegisterPage() {
         <h2 className="text-2xl font-bold mb-6 text-center">Criar uma conta</h2>
         {success && (
           <div className="bg-green-200 text-green-800 p-3 rounded mb-4">
-            Registro realizado com sucesso! Redirecionando...
+            Conta criada! Enviamos um e-mail de confirmação. Clique no link para ativar sua conta e depois entre no site. Redirecionando para o login...
           </div>
         )}
         {error && <div className="bg-red-200 text-red-800 p-3 rounded mb-4">{error}</div>}
