@@ -244,7 +244,10 @@ export async function createForumPost(
       .insert([{ user_id: userId, title, content, resolved: false }])
       .select()
 
-    if (insertError) throw insertError
+    if (insertError) {
+      console.error("Erro ao inserir post:", insertError.message, "| código:", insertError.code, "| detalhes:", insertError.details)
+      throw insertError
+    }
     if (!insertedPost || insertedPost.length === 0) throw new Error("No data returned from post insertion")
 
     const newPost = insertedPost[0] // Get the first (and should be only) inserted post
