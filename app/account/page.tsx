@@ -65,7 +65,7 @@ export default function AccountPage() {
   const router = useRouter()
   const { toast } = useToast()
   const [error, setError] = useState<string | null>(null)
-  const { user: authUser, loading: authLoading, refreshUser } = useAuth()
+  const { user: authUser, isLoading: authLoading } = useAuth()
   const [joinDate, setJoinDate] = useState<string | null>(null)
   const [lastActive, setLastActive] = useState<string | null>(null)
   const [studyGoal, setStudyGoal] = useState<number>(60)
@@ -218,7 +218,7 @@ export default function AccountPage() {
     }
 
     fetchUserData()
-  }, [router, supabase, authUser, authLoading, user, refreshUser])
+  }, [router, supabase, authUser, authLoading, user])
 
   // Só redirecione se não estiver carregando e não houver usuário
   useEffect(() => {

@@ -29,7 +29,7 @@ import { Label } from "@/components/ui/label"
 const DEFAULT_AVATAR = "/default-avatar.png"
 
 export default function ForumPage() {
-  const { user } = useAuth()
+  const { user, isLoading: authLoading } = useAuth()
   const router = useRouter()
   const [posts, setPosts] = useState<ForumPostType[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -361,12 +361,13 @@ export default function ForumPage() {
   }, [user, autoRefresh])
 
   useEffect(() => {
+    if (authLoading) return // espera o Supabase restaurar a sessão
     if (!user) {
       router.push("/login")
     } else {
       fetchPosts()
     }
-  }, [user, router])
+  }, [user, authLoading, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { supabase } from "@/lib/supabase"
+import { supabase } from "@/lib/supabaseClient"
 
 // Hook para usar autenticação Supabase fora do contexto AuthProvider
 export function useSupabaseAuth() {

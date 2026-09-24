@@ -104,7 +104,7 @@ export default function RECPage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [hasExistingProfile, setHasExistingProfile] = useState(false)
   const [isEditingProfile, setIsEditingProfile] = useState(false)
-  const { user } = useAuth()
+  const { user, isLoading: authLoading } = useAuth()
   const router = useRouter()
   const { toast } = useToast()
 
@@ -184,6 +184,7 @@ export default function RECPage() {
   }
 
   useEffect(() => {
+    if (authLoading) return // espera o Supabase restaurar a sessão
     if (!user) {
       router.push("/login")
       return
@@ -193,7 +194,7 @@ export default function RECPage() {
     if (savedProfile) {
       generateRoutineFromProfile(savedProfile)
     }
-  }, [user, router])
+  }, [user, authLoading, router])
 
   const handleInputChange = (field: keyof StudyProfile, value: string | string[]) => {
     setProfile((prev) => ({ ...prev, [field]: value }))

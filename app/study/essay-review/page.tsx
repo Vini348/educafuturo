@@ -99,16 +99,17 @@ export default function EssayReviewPage() {
   const [activeTab, setActiveTab] = useState("editor")
   const [selectedTheme, setSelectedTheme] = useState<(typeof essayThemes)[0] | null>(null)
   const [showThemeText, setShowThemeText] = useState(false)
-  const { user } = useAuth()
+  const { user, isLoading: authLoading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
+    if (authLoading) return // espera o Supabase restaurar a sessão
     if (!user) {
       router.push("/login")
       return
     }
     loadEssayHistory()
-  }, [user, router])
+  }, [user, authLoading, router])
 
   useEffect(() => {
     const words = essayText
