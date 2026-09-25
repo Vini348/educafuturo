@@ -28,7 +28,7 @@ export function ForgotPasswordDialog({ children }: ForgotPasswordDialogProps) {
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
   const [open, setOpen] = useState(false)
-  const { resetPassword } = useAuth()
+  const { forgotPassword } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -48,15 +48,15 @@ export function ForgotPasswordDialog({ children }: ForgotPasswordDialogProps) {
     }
 
     try {
-      const { error } = await resetPassword(email)
+      const { error } = await forgotPassword(email)
 
       if (error) {
-        if (error.message.includes("User not found")) {
-          setError("Email não encontrado. Verifique se o email está correto.")
-        } else if (error.message.includes("Email rate limit exceeded")) {
+        if (error.includes("not authorized")) {
+          setError("Não foi possível enviar o e-mail para este endereço. Tente novamente mais tarde.")
+        } else if (error.includes("rate limit") || error.includes("security purposes")) {
           setError("Muitas tentativas. Aguarde alguns minutos antes de tentar novamente.")
         } else {
-          setError(error.message)
+          setError(error)
         }
       } else {
         setSuccess(true)

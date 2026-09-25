@@ -13,7 +13,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, userData?: any) => Promise<{ error?: any }>
   signOut: () => Promise<void>
   logout: () => Promise<void>
-  resetPassword: (email: string, newPassword: string, currentPassword: string) => Promise<{ error?: any }>
+  forgotPassword: (email: string) => Promise<{ error: string | null }>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -120,34 +120,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const resetPassword = async (email: string, newPassword: string, currentPassword: string) => {
+  const forgotPassword = async (email: string) => {
     try {
-      setIsLoading(true)
-
-      // First verify current credentials
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password: currentPassword,
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
       })
 
-      if (signInError) {
-        return { error: { message: "Credenciais atuais incorretas" } }
-      }
-
-      // Update password
-      const { error: updateError } = await supabase.auth.updateUser({
-        password: newPassword,
-      })
-
-      if (updateError) {
-        return { error: updateError }
+      if (error) {
+        return { error: error.message }
       }
 
       return { error: null }
     } catch (error) {
-      return { error }
-    } finally {
-      setIsLoading(false)
+      return { error: "Erro ao enviar email de recuperação. Tente novamente." }
     }
   }
 
@@ -162,7 +147,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signOut,
     logout,
-    resetPassword,
+    forgotPassword,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

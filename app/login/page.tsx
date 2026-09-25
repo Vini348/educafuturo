@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { useAuth } from "@/lib/authContext"
 import Link from "next/link"
+import { ForgotPasswordDialog } from "@/components/forgot-password-dialog"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -118,9 +119,11 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-4 text-center space-y-2">
-            <Link href="/reset-password" className="text-sm text-blue-600 hover:underline">
-              Esqueceu a senha?
-            </Link>
+            <ForgotPasswordDialog>
+              <button type="button" className="text-sm text-blue-600 hover:underline">
+                Esqueceu a senha?
+              </button>
+            </ForgotPasswordDialog>
 
             <p className="text-sm text-gray-600">
               Não tem uma conta?{" "}

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,25 +10,52 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Eye, EyeOff, Loader2, CheckCircle, X, Check } from "lucide-react"
-import { useAuth } from "@/lib/authContext"
+import { supabase } from "@/lib/supabaseClient"
 import Link from "next/link"
 
 export default function ResetPasswordPage() {
-  const [email, setEmail] = useState("")
-  const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
 
-  const { resetPassword } = useAuth()
+  // "checking": conferindo o link; "valid": pode redefinir; "invalid": link inválido ou expirado
+  const [linkStatus, setLinkStatus] = useState<"checking" | "valid" | "invalid">("checking")
+
   const router = useRouter()
 
-  // Password criteria validation
+  useEffect(() => {
+    // Quando a pessoa clica no link do e-mail, o Supabase abre uma sessão temporária
+    // de recuperação nesta página e dispara o evento PASSWORD_RECOVERY.
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setLinkStatus("valid")
+      }
+    })
+
+    // Se o evento já tiver disparado antes deste componente montar, a sessão já existe.
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        setLinkStatus((current) => (current === "checking" ? "valid" : current))
+      }
+    })
+
+    // Dá um tempo para o Supabase processar o link; se nada acontecer, o link não é válido.
+    const timeout = setTimeout(() => {
+      setLinkStatus((current) => (current === "checking" ? "invalid" : current))
+    }, 4000)
+
+    return () => {
+      subscription.unsubscribe()
+      clearTimeout(timeout)
+    }
+  }, [])
+
   const passwordCriteria = {
     length: newPassword.length >= 6,
     uppercase: /[A-Z]/.test(newPassword),
@@ -48,29 +75,56 @@ export default function ResetPasswordPage() {
       return
     }
 
-    if (newPassword === currentPassword) {
-      setError("A nova senha deve ser diferente da senha atual")
-      return
-    }
-
     setIsLoading(true)
 
     try {
-      const { error } = await resetPassword(email, newPassword, currentPassword)
+      const { error } = await supabase.auth.updateUser({ password: newPassword })
 
       if (error) {
         setError(error.message || "Erro ao redefinir senha")
       } else {
         setSuccess(true)
         setTimeout(() => {
-          router.push("/login?message=Senha redefinida com sucesso!")
-        }, 2000)
+          router.push("/login")
+        }, 3000)
       }
     } catch (err) {
       setError("Erro inesperado. Tente novamente.")
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (linkStatus === "checking") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+        <div className="flex flex-col items-center gap-3 text-gray-600">
+          <Loader2 className="h-8 w-8 animate-spin" />
+          <p>Verificando o link de recuperação...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (linkStatus === "invalid") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-6">
+            <div className="text-center space-y-4">
+              <X className="h-16 w-16 text-red-600 mx-auto" />
+              <h2 className="text-2xl font-bold text-gray-900">Link inválido ou expirado</h2>
+              <p className="text-gray-600">
+                Este link de recuperação de senha não é mais válido. Solicite um novo link na tela de login.
+              </p>
+              <Link href="/login" className="text-sm text-blue-600 hover:underline block">
+                Voltar ao login
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   if (success) {
@@ -96,9 +150,7 @@ export default function ResetPasswordPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Redefinir Senha</CardTitle>
-          <CardDescription className="text-center">
-            Digite suas credenciais atuais e defina uma nova senha
-          </CardDescription>
+          <CardDescription className="text-center">Escolha uma nova senha para a sua conta</CardDescription>
         </CardHeader>
         <CardContent>
           {error && (
@@ -108,44 +160,6 @@ export default function ResetPasswordPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="seu@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={isLoading}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="currentPassword">Senha Atual</Label>
-              <div className="relative">
-                <Input
-                  id="currentPassword"
-                  type={showCurrentPassword ? "text" : "password"}
-                  placeholder="Sua senha atual"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  required
-                  disabled={isLoading}
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  disabled={isLoading}
-                >
-                  {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </Button>
-              </div>
-            </div>
-
             <div className="space-y-2">
               <Label htmlFor="newPassword">Nova Senha</Label>
               <div className="relative">
@@ -196,7 +210,6 @@ export default function ResetPasswordPage() {
               </div>
             </div>
 
-            {/* Password Criteria */}
             {newPassword && (
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Critérios da senha:</Label>
