@@ -65,7 +65,7 @@ export async function getForumPosts(): Promise<ForumPost[]> {
     // Fetch user data separately
     const userIds = new Set(posts.map((post) => post.user_id))
     const { data: users, error: usersError } = await supabase
-      .from("profiles")
+      .from("profiles_public")
       .select("id, full_name, avatar_url")
       .in("id", Array.from(userIds))
 
@@ -122,7 +122,7 @@ export async function getForumPosts(): Promise<ForumPost[]> {
         if (comments && comments.length > 0) {
           const commentUserIds = [...new Set(comments.map((comment) => comment.user_id))]
           const { data: commentUsers, error: commentUsersError } = await supabase
-            .from("profiles")
+            .from("profiles_public")
             .select("id, full_name, avatar_url")
             .in("id", commentUserIds)
 
@@ -303,7 +303,7 @@ export async function createForumPost(
 
     // Fetch user data
     const { data: userData, error: userError } = await supabase
-      .from("profiles")
+      .from("profiles_public")
       .select("id, full_name, avatar_url")
       .eq("id", userId)
       .single()
@@ -392,7 +392,7 @@ export async function createForumComment(
 
     // Fetch user data
     const { data: userData, error: userError } = await supabase
-      .from("profiles")
+      .from("profiles_public")
       .select("id, full_name, avatar_url")
       .eq("id", userId)
       .single()

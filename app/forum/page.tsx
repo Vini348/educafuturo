@@ -80,7 +80,7 @@ export default function ForumPage() {
       // Buscar usuários separadamente
       const userIds = [...new Set(postsData.map((post) => post.user_id))]
       const { data: usersData, error: usersError } = await supabase
-        .from("profiles")
+        .from("profiles_public")
         .select("id, full_name, avatar_url")
         .in("id", userIds)
 
@@ -162,7 +162,7 @@ export default function ForumPage() {
           if (commentsData && commentsData.length > 0) {
             const commentUserIds = [...new Set(commentsData.map((comment) => comment.user_id))]
             const { data: commentUsersData, error: commentUsersError } = await supabase
-              .from("profiles")
+              .from("profiles_public")
               .select("id, full_name, avatar_url")
               .in("id", commentUserIds)
 

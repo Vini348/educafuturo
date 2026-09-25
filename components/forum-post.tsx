@@ -42,7 +42,7 @@ export function ForumPost({ post, onLike, onReply, onDelete }: ForumPostProps) {
     const fetchProfileImage = async () => {
       if (post.user_id) {
         try {
-          const { data, error } = await supabase.from("profiles").select("avatar_url").eq("id", post.user_id).single()
+          const { data, error } = await supabase.from("profiles_public").select("avatar_url").eq("id", post.user_id).single()
 
           if (error) {
             console.error("Error fetching profile image:", error)
