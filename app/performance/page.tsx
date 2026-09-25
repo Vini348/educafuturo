@@ -263,7 +263,7 @@ const calculateOverallAccuracy = async (user_id: string) => {
     // Fetch game results
     const { data: gameData, error: gameError } = await supabase
       .from("game_results")
-      .select("accuracy")
+      .select("accuracy, challenges_completed")
       .eq("user_id", user_id)
       .limit(100)
 
@@ -287,15 +287,19 @@ const calculateOverallAccuracy = async (user_id: string) => {
     }
 
     // Calculate game accuracy
+    // game_results.accuracy já vem em porcentagem (0-100), diferente de
+    // quiz/flashcard que somam contagens brutas. Por isso convertemos para
+    // "acertos estimados" usando challenges_completed como o total de
+    // tentativas daquela sessão, mantendo tudo na mesma unidade antes de
+    // somar. Sem essa conversão, a % de jogos era somada como se fosse uma
+    // contagem e depois multiplicada por 100 de novo no cálculo final,
+    // inflando a precisão geral (o bug da precisão acima de 100%).
     if (gameData && gameData.length > 0) {
-      let gameAccuracySum = 0
       gameData.forEach((game) => {
-        gameAccuracySum += game.accuracy
+        const attempts = game.challenges_completed || 1 // Evitar divisão por zero
+        totalCorrect += (game.accuracy / 100) * attempts
+        totalAttempts += attempts
       })
-      // Add weighted game accuracy to total
-      const gameAverageAccuracy = gameAccuracySum / gameData.length
-      totalCorrect += gameAverageAccuracy * gameData.length
-      totalAttempts += gameData.length
     }
 
     // Calculate overall accuracy
@@ -818,6 +822,13 @@ export default function PerformancePage() {
           const accuracy = await calculateOverallAccuracy(user.id)
           setOverallAccuracy(accuracy)
           setCalibrationStatus("calibrated")
+          // calculateOverallAccuracy já salvou um novo ponto no banco (via
+          // saveCalibrationData); sem isto, o gráfico só mostraria esse ponto
+          // depois de a página ser recarregada de novo.
+          setPerformanceData((prev) => ({
+            ...prev,
+            accuracyHistory: [...prev.accuracyHistory, { date: new Date().toISOString(), accuracy }].slice(-30),
+          }))
         }
       } else {
         // Primeira calibração
@@ -825,6 +836,10 @@ export default function PerformancePage() {
         const accuracy = await calculateOverallAccuracy(user.id)
         setOverallAccuracy(accuracy)
         setCalibrationStatus("calibrated")
+        setPerformanceData((prev) => ({
+          ...prev,
+          accuracyHistory: [...prev.accuracyHistory, { date: new Date().toISOString(), accuracy }].slice(-30),
+        }))
       }
     } catch (error) {
       console.error("Error fetching accuracy data:", error)
