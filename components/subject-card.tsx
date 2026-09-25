@@ -13,21 +13,36 @@ interface SubjectCardProps {
   onClick?: () => void
 }
 
-export function SubjectCard({ icon: Icon, title, progress, total, className, onClick }: SubjectCardProps) {
-  const progressPercentage = (progress / total) * 100
+export function SubjectCard({
+  icon: Icon,
+  title,
+  progress,
+  total,
+  className,
+  onClick,
+}: SubjectCardProps) {
+  const progressPercentage = total > 0 ? Math.min(100, (progress / total) * 100) : 0
 
   return (
-    <Card className={`p-4 hover:shadow-md transition-all dark:border-gray-800 ${className}`} onClick={onClick}>
+    <Card
+      className={`p-4 hover:shadow-md transition-all dark:border-gray-800 ${className ?? ""}`}
+      onClick={onClick}
+    >
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-3">
           <Icon className="h-6 w-6 text-white dark:text-white" />
           <h3 className="font-medium text-white dark:text-white">{title}</h3>
         </div>
+
         <span className="text-white dark:text-white text-sm">
           {progress}/{total}
         </span>
       </div>
-      <Progress value={progressPercentage} className="bg-white/20 dark:bg-white/10" />
+
+      <Progress
+        value={progressPercentage}
+        className="bg-white/20 dark:bg-white/10"
+      />
     </Card>
   )
 }
