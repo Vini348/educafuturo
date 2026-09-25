@@ -61,14 +61,25 @@ export function StudyStreakPopup() {
     if (!user || !selectedDate) return
 
     try {
+      const dateStr = selectedDate.toISOString().split("T")[0]
+
+      const { data: current } = await supabase
+        .from("user_performance")
+        .select("study_days")
+        .eq("user_id", user.id)
+        .maybeSingle()
+
+      const studyDays = new Set(current?.study_days || [])
+      studyDays.add(dateStr)
+
       const { error } = await supabase.from("user_performance").upsert({
         user_id: user.id,
         last_login: new Date().toISOString(),
         study_streak: streak,
-        study_days: supabase.sql`array_append(study_days, ${selectedDate.toISOString().split("T")[0]})`,
+        study_days: Array.from(studyDays),
       })
 
-      if (error) throw error
+    if (error) throw error
 
       toast({
         title: "Sucesso",

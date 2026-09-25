@@ -10,7 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/components/ui/use-toast"
 import { supabase } from "@/lib/supabaseClient"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/lib/authContext"
 import {
   BookmarkCheck,
   Clock,
