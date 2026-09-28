@@ -178,6 +178,12 @@ function ComponentCard({
                 e.stopPropagation()
                 onToggleFavorite()
               }}
+              aria-label={
+                isFavorite
+                  ? `Remover ${component.name} dos favoritos`
+                  : `Adicionar ${component.name} aos favoritos`
+              }
+              aria-pressed={isFavorite}
             >
               <Heart className={`h-4 w-4 ${isFavorite ? "text-red-500 fill-red-500" : "text-gray-500"}`} />
             </Button>
@@ -427,7 +433,7 @@ export default function ComponentsPage() {
       <main className="container mx-auto px-4 py-6 space-y-6">
         <div className="flex items-center gap-4">
           <Link href="/study">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" aria-label="Voltar para Estudos">
               <ArrowLeft className="h-6 w-6" />
             </Button>
           </Link>

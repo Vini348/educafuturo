@@ -205,7 +205,18 @@ export default function HomePage() {
         <div className="space-y-4">
           {filteredSubjects.map((subject) => (
             <div key={subject.id} className="flex gap-4 items-center">
-              <Button variant="ghost" size="icon" onClick={() => toggleFavorite(subject.id)} className="flex-shrink-0">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => toggleFavorite(subject.id)}
+                className="flex-shrink-0"
+                aria-label={
+                  favorites.includes(subject.id)
+                    ? `Remover ${subject.category} dos favoritos`
+                    : `Adicionar ${subject.category} aos favoritos`
+                }
+                aria-pressed={favorites.includes(subject.id)}
+              >
                 <Star
                   className={`h-4 w-4 ${favorites.includes(subject.id) ? "fill-yellow-400 text-yellow-400" : ""}`}
                 />

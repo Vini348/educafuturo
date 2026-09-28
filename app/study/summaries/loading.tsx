@@ -14,7 +14,7 @@ export default function SummariesLoading() {
 
       <main className="container mx-auto px-4 py-6 space-y-6">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" disabled>
+          <Button variant="ghost" size="icon" disabled aria-label="Voltar (carregando)">
             <ArrowLeft className="h-6 w-6" />
           </Button>
           <h1 className="text-2xl font-bold">Resumos</h1>

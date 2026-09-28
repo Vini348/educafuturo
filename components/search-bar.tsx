@@ -161,7 +161,12 @@ export function SearchBar() {
       <div className="space-y-4">
         {filteredSubjects.map((subject) => (
           <div key={subject.category} className="flex gap-4 items-center">
-            <Button variant="ghost" size="icon" onClick={() => toggleFavorite(subject.id)} className="flex-shrink-0">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => toggleFavorite(subject.id)} 
+              className="flex-shrink-0"
+            >
               <Star className={`h-4 w-4 ${favorites.includes(subject.id) ? "fill-yellow-400 text-yellow-400" : ""}`} />
             </Button>
             <Link href={`/subjects/${subject.id}`} className="flex-1">

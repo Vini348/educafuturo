@@ -890,6 +890,7 @@ export default function ForumPage() {
                             className="text-blue-600 border-blue-600 hover:bg-blue-50"
                             onClick={() => handleEditPost(post)}
                             title="Editar discussão"
+                            aria-label="Editar discussão"
                           >
                             <Edit2 className="h-4 w-4" />
                           </Button>
@@ -899,6 +900,7 @@ export default function ForumPage() {
                             className="text-green-600 border-green-600 hover:bg-green-50"
                             onClick={() => handleMarkAsResolved(post.id)}
                             title="Marcar como resolvida"
+                            aria-label="Marcar como resolvida"
                           >
                             <CheckCircle className="h-4 w-4" />
                           </Button>

@@ -823,7 +823,7 @@ export default function GamePage() {
 
       <main className="container mx-auto px-4 py-6">
         <div className="flex items-center gap-4 mb-6">
-          <Button variant="ghost" size="icon" onClick={() => router.back()}>
+          <Button variant="ghost" size="icon" onClick={() => router.back()} aria-label="Voltar">
             <ArrowLeft className="h-6 w-6" />
           </Button>
           <div>

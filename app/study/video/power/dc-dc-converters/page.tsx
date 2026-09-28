@@ -13,7 +13,7 @@ export default function DCDCConvertersPage() {
       <main className="container mx-auto px-4 py-6 space-y-6">
         <div className="flex items-center gap-4">
           <Link href="/performance">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" aria-label="Voltar para Desempenho">
               <ArrowLeft className="h-6 w-6" />
             </Button>
           </Link>

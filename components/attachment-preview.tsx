@@ -36,6 +36,7 @@ export function AttachmentPreview({ attachment, onDelete, showDelete = false }: 
               size="icon"
               className="absolute top-1 right-1 z-10 h-6 w-6 rounded-full"
               onClick={onDelete}
+              aria-label="Remover anexo"
             >
               <XIcon className="h-3 w-3" />
             </Button>

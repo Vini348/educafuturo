@@ -111,7 +111,7 @@ export default function PomodoroPage() {
       <main className="container mx-auto px-4 py-6">
         <div className="flex items-center gap-4 mb-8">
           <Link href="/study">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" aria-label="Voltar para Estudos">
               <ArrowLeft className="h-6 w-6" />
             </Button>
           </Link>
@@ -121,7 +121,7 @@ export default function PomodoroPage() {
           <div className="flex justify-end mb-4">
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" aria-label="Configurações do Pomodoro">
                   <Settings className="h-5 w-5" />
                 </Button>
               </DialogTrigger>

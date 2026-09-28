@@ -21,6 +21,9 @@ export default function RootLayout({
 }
 
 export const metadata = {
-  title: "EducaFuturo",
-  description: "Plataforma de estudos gamificada",
+  title: {
+    default: "EducaFuturo",
+    template: "%s | EducaFuturo",
+  },
+  description: "Plataforma de estudos gamificada com foco em eletrônica, ENEM e PAS.",
 }

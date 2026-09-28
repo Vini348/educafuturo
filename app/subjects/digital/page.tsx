@@ -15,7 +15,7 @@ export default function DigitalElectronicsPage() {
       <main className="container mx-auto px-4 py-6 space-y-6">
         <div className="flex items-center gap-4">
           <Link href="/">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" aria-label="Voltar para a página inicial">
               <ArrowLeft className="h-6 w-6" />
             </Button>
           </Link>
