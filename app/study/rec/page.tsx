@@ -108,6 +108,23 @@ export default function RECPage() {
   const router = useRouter()
   const { toast } = useToast()
 
+  // O Tailwind só reconhece classes escritas por extenso no código; uma classe
+  // montada por interpolação (`bg-${cor}-100`) nunca funciona, em nenhum
+  // ambiente. Por isso usamos este mapa fixo em vez de montar a classe.
+  const subjectColorClasses: Record<string, string> = {
+    blue: "bg-blue-100",
+    indigo: "bg-indigo-100",
+    green: "bg-green-100",
+    purple: "bg-purple-100",
+    cyan: "bg-cyan-100",
+    yellow: "bg-yellow-100",
+    pink: "bg-pink-100",
+    red: "bg-red-100",
+    orange: "bg-orange-100",
+    gray: "bg-gray-100",
+    slate: "bg-slate-100",
+  }
+
   const allSubjects = {
     "1º Ano": [
       { id: "circuitos-1ano", name: "Circuitos", icon: "Zap", color: "blue" },
@@ -888,7 +905,7 @@ export default function RECPage() {
                           onClick={() => profile.studyYear === year && handleSubjectToggle(subject.name)}
                         >
                           <div className="flex items-center">
-                            <div className={`p-2 rounded-lg bg-${subject.color}-100 mr-3`}>
+                            <div className={`p-2 rounded-lg ${subjectColorClasses[subject.color] || "bg-gray-100"} mr-3`}>
                               {subject.icon === "Zap" && <Zap className="h-5 w-5" />}
                               {subject.icon === "Cpu" && <Cpu className="h-5 w-5" />}
                               {subject.icon === "Calculator" && <Calculator className="h-5 w-5" />}
@@ -903,7 +920,6 @@ export default function RECPage() {
                             </div>
                             <div>
                               <p className="font-medium">{subject.name}</p>
-                              <p className="text-xs text-muted-foreground">{subject.id}</p>
                             </div>
                           </div>
                         </div>
