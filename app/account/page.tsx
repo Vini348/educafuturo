@@ -334,7 +334,9 @@ export default function AccountPage() {
       })
 
       if (studyResult.error) {
-        throw new Error("Erro ao atualizar preferências de estudo")
+        console.error("Erro ao atualizar preferências de estudo:", studyResult.error)
+
+        throw new Error(studyResult.error?.message || "Erro ao atualizar preferências de estudo")
       }
 
       // Atualizar também os metadados do usuário para consistência
@@ -740,7 +742,7 @@ export default function AccountPage() {
               <div className="flex flex-col items-center space-y-4">
                 <div className="relative group">
                   <Avatar className="h-24 w-24 border-4 border-background">
-                    <AvatarImage src={profileImage || ""} alt={name || "Perfil do usuário"} />
+                    <AvatarImage src={profileImage || "/default-avatar.svg"} alt={name || "Perfil do usuário"} />
                     <AvatarFallback className="text-xl bg-primary text-primary-foreground">
                       {name?.charAt(0) || currentUser.email?.charAt(0)}
                     </AvatarFallback>

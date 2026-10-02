@@ -100,10 +100,10 @@ export async function saveStudyPreferences(
       .from("profiles")
       .select("study_preferences")
       .eq("id", userId)
-      .single()
+      .maybeSingle()
 
-    if (fetchError && fetchError.code !== "PGRST116") {
-      // Ignorar erro de não encontrado
+    if (fetchError) {
+      console.error("Erro ao buscar preferências de estudo:", fetchError)
       return { success: false, error: fetchError }
     }
 

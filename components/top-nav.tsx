@@ -59,7 +59,7 @@ export function TopNav() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.user_metadata?.avatar_url || "/placeholder.svg"} alt={user.email} />
+                    <AvatarImage src={user.user_metadata?.avatar_url || "/default-avatar.svg"} alt={user.email || "Perfil do usuário"} />
                     <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 </Button>
