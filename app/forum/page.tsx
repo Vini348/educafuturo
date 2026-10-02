@@ -26,7 +26,7 @@ import { formatDistanceToNow } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { Label } from "@/components/ui/label"
 
-const DEFAULT_AVATAR = "/default-avatar.png"
+const DEFAULT_AVATAR = "/default-avatar.svg"
 
 export default function ForumPage() {
   const { user, isLoading: authLoading } = useAuth()
@@ -741,8 +741,8 @@ export default function ForumPage() {
                     <div className="flex items-start gap-4">
                       <Avatar>
                         <AvatarImage
-                          src={post.user?.avatar_url || user?.profileImage || "/default-avatar.png"}
-                          alt={post.user?.full_name || user?.user_metadata?.full_name || "Usuário"}
+                          src={post.user?.avatar_url || DEFAULT_AVATAR}
+                          alt={post.user?.full_name || "Usuário"}
                         />
                         <AvatarFallback>{post.user?.full_name?.[0]?.toUpperCase() || "U"}</AvatarFallback>
                       </Avatar>
@@ -838,7 +838,7 @@ export default function ForumPage() {
                                   <div className="flex items-center gap-2 mb-1">
                                     <Avatar className="h-6 w-6">
                                       <AvatarImage
-                                        src={comment.user?.avatar_url || user?.profileImage || "/default-avatar.png"}
+                                        src={comment.user?.avatar_url || DEFAULT_AVATAR}
                                         alt={comment.user?.full_name || user?.user_metadata?.full_name || "Usuário"}
                                       />
                                       <AvatarFallback>
